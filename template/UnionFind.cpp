@@ -3,7 +3,7 @@ using namespace std;
 
 struct UnionFind{
 
-  vector<int> par;  // par[i]:iの親の番号 ex)par[3]=2→"3の親が2"
+  vector<int> par;  // par[i]:iの親の番号 ex)par[3]=2→'3の親が2'
   vector<int> siz;  // 各木のサイズ
 
   // コンストラクタ
@@ -38,32 +38,3 @@ struct UnionFind{
     return siz[root(x)];
   }
 };
-
-
-int main(){
-
-  int n;
-  cin >> n;
-  vector<int> a(n);
-  for(int i=0;i<n;i++)cin >> a[i];
-
-  UnionFind uni(200005);
-  // cout << "1,2,3,4,5" << endl;
-  // for(int i=1;i<6;i++){
-  //   cout << uni.par[i] << ",";
-  // }cout << endl;
-  for(int i=0;i<n/2;i++){
-    uni.unite(a[i],a[n-i-1]);
-    // for(int j=1;j<6;j++){
-    //   cout << uni.par[j] << ",";
-    // }cout << endl;
-  }
-
-  int ans=0;
-  for(int i=1;i<200005;i++){
-    if(uni.root(i)!=i)continue;
-    ans+=uni.size(i)-1;
-  }
-
-  cout << ans << endl;
-}
