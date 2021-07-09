@@ -3,40 +3,48 @@ using namespace std;
 
 using ll = long long;
 
+struct border{
+  int in;
+  int out;
+};
+
 int main(){
 
   int n;
   cin >> n;
-  map<int,pair<pair<int,int>,pair<int,int>>> mp;
+  map<int,pair<border,border>> mp;
 
   int t,l,r;
   for(int i=0;i<n;i++){
     cin >> t >> l >> r;
     if(t==1){
-      mp[l].first.first++;
-      mp[r].second.first++;
+      mp[l].first.in++;
+      mp[r].second.in++;
     }else if(t==2){
-      mp[l].first.first++;
-      mp[r].second.second++;
+      mp[l].first.in++;
+      mp[r].second.out++;
     }else if(t==3){
-      mp[l].first.second++;
-      mp[r].second.first++;
+      mp[l].first.out++;
+      mp[r].second.in++;
     }else if(t==4){
-      mp[l].first.second++;
-      mp[r].second.second++;
+      mp[l].first.out++;
+      mp[r].second.out++;
     }
   }
 
   
   int now=0;
   ll ans=0;
-  pair<int,int> add,dis;
+  border add,dis;
   for(auto point:mp){
     add=point.second.first;
     dis=point.second.second;
-    now-=dis.second;
-    ans+=now*add.first+max(0,add.first+add.second-1);
-    now+=add.first+add.second-dis.first;
+    now-=dis.out;
+    ans+=dis.in*add.in;
+    now-=dis.in;
+    ans+=now*(add.in+add.out);
+    ans+=max(0,(add.in+add.out)*(add.in+add.out-1)/2);
+    now+=add.in+add.out;
   }
 
   cout << ans << endl;
