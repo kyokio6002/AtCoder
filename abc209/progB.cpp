@@ -11,7 +11,7 @@ int main(){
   for(int i=0;i<n;i++){
     int a;
     cin >> a;
-    if(i%2==1)a--;
+    if(i%2)a--;
     sum+=a;
   }
 
