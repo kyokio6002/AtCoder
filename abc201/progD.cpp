@@ -8,10 +8,6 @@ int main(){
   int h,w;
   cin >> h >> w;
 
-  if(w==1 && h==1){
-    cout << "Drow" << endl;
-    return 0;
-  }
 
   vector<vector<int>> a(w,vector<int>(h));
   for(int y=0;y<h;y++){
@@ -22,8 +18,9 @@ int main(){
       else a[x][y]=-1;
     }
   }
-
+  
   vector<vector<int>> dp(w,vector<int>(h,INF));
+  // vector<vector<int>> dp(w,vector<int>(h));
 
   // (x+y)%2==1 Takahashi
   // (x+y)%2==0 Aoki
@@ -34,33 +31,38 @@ int main(){
 
   for(int y=h-1;y>=0;y--){
     for(int x=w-1;x>=0;x--){
-      if(x-1>=0){
-        if((x+y)%2)dp[x-1][y]=max(dp[x-1][y],dp[x][y]+a[x-1][y]);
+      if(x+1<w){
+        if((x+y)%2==1)dp[x][y]=max(dp[x][y],dp[x+1][y]+a[x][y]);
         else{
-          if(dp[x-1][y]==INF)dp[x-1][y]=dp[x][y]-a[x-1][y];
-          else dp[x-1][y]=min(dp[x-1][y],dp[x][y]-a[x-1][y]);
+          if(dp[x][y]==INF)dp[x][y]=dp[x+1][y]-a[x][y];
+          else dp[x][y]=min(dp[x][y],dp[x+1][y]-a[x][y]);
         }
       }
-      if(y-1>=0){
-        if((x+y)%2)dp[x][y-1]=max(dp[x][y-1],dp[x][y]+a[x][y-1]);
+      if(y+1<h){
+        if((x+y)%2==1)dp[x][y]=max(dp[x][y],dp[x][y+1]+a[x][y]);
         else{
-          if(dp[x][y-1]==INF)dp[x][y-1]=dp[x][y]-a[x][y-1];
-          else dp[x][y-1]=min(dp[x][y-1],dp[x][y]-a[x][y-1]);
+          if(dp[x][y]==INF)dp[x][y]=dp[x][y+1]-a[x][y];
+          else dp[x][y]=min(dp[x][y],dp[x][y+1]-a[x][y]);
         }
       }
     }
   }
 
 
-  for(int y=0;y<h;y++){
-    for(int x=0;x<w;x++){
-      cout << dp[x][y] << " ";
-    }cout << endl;
-  }
+  // for(int y=0;y<h;y++){
+  //   for(int x=0;x<w;x++){
+  //     cout << dp[x][y] << " ";
+  //   }cout << endl;
+  // }
 
+  int ans;
+  if(h>=2 && w>=2)ans=max(dp[0][1],dp[1][0]);
+  else if(h<2 && w>=2)ans=dp[1][0];
+  else if(w<2 && h>=2)ans=dp[0][1];
+  else ans=0;
 
-  if(dp[0][0]>0)cout << "Takahashi" << endl;
-  else if(dp[0][0]==0)cout << "Drow" << endl;
+  if(ans>0)cout << "Takahashi" << endl;
+  else if(ans==0)cout << "Draw" << endl;
   else cout << "Aoki" << endl;
 
 }
