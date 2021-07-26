@@ -1,31 +1,40 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define mod 1000000007;
 vector<vector<int>> edge;
-vector<vector<int>> dist;  //to,from
-vector<int> cost;
-int mintime=mod;
-int ans;
+vector<vector<int>> dist;  // from→to
+int mincost=100100100;
+int ans=0;
 
-void dfs(int v,int time,int last){
-  //cout << v+1 << "→";
+void dfs(int v,int from,int cost,int last){
+  dist[from][v]++;
+  cout << "v:" << v+1 << endl;
+  cout << "mincost:" << mincost << endl;
+  cout << "cost:" << cost << endl;
+  cout << "ans:" << ans << endl << endl;
+
   if(v==last){
-    if(mintime>=time){
-      mintime=time;
-      if(mintime==time)ans++;
-      else ans=1;
-    };
-    mintime=time;
+    cout << "bmincost:" << mincost << endl;
+    cout << "cost:" << cost << endl;
+    cout << "bans:" << ans << endl;
+    if(mincost>=cost){
+      if(cost==mincost)ans++;
+      else{
+        ans=1;
+        mincost=cost;
+      }
+      cout << "amincost:" << mincost << endl;
+      cout << "aans:" << ans << endl << endl;
+    }
     return;
   }
+
   for(auto nv:edge[v]){
-    if(dist[nv][v]>0)continue;
-    dist[nv][v]++;
-    //cout << nv+1 << endl;
-    //cout << "time:" << time+1 << endl;
-    //cout << "mintime:" << mintime << endl << endl;
-    dfs(nv,time+1,last);
+    int nowcost=cost;
+    if(dist[v][nv]>0 && nv!=last && nowcost>=mincost)continue;
+    cout << "cost[v]:" << nowcost << " " << v+1 << endl;
+    cout << "goto:" << nv+1 << endl << endl;
+    dfs(nv,v,nowcost+1,last);
   }
   return;
 }
@@ -34,13 +43,9 @@ int main(){
 
   int n,m;
   cin >> n >> m;
-  int last=n-1;
+
   edge.resize(n);
   dist.resize(n,vector<int>(n));
-  cost.resize(n);
-  for(int i=0;i<n;i++)cost[i]=mod;
-  cost[0]=0;
-  
   int a,b;
   for(int i=0;i<m;i++){
     cin >> a >> b;
@@ -49,8 +54,7 @@ int main(){
     edge[b].push_back(a);
   }
 
-  ans=0;
-  dfs(0,0,last);
+  dfs(0,0,0,n-1);
 
   cout << ans << endl;
 }
