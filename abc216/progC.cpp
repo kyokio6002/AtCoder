@@ -5,31 +5,25 @@ using ll=long long;
 
 int main(){
 
-  ll n;
+  int n;
   cin >> n;
+  vector<char> p;
+  for(int i=0;i<1000;i++)p.push_back('A');
+  for(int i=0;i<66;i++)p.push_back('B');
 
-  ll now=1;
-  cout << 'A';
-  while(1){
-    now*=2;
-    if(now>=n){
-      if(now==n){
-        cout << 'B' << endl;
+  do{
+    ll sum=0;
+    int stop;
+    for(int i=0;i<120;i++){
+      if(p[i]=='A')sum+=1;
+      else sum*=2;
+      if(sum>n)break;
+      if(sum==n){
+        for(int j=0;j<=i;j++)cout << p[j];
+        cout << endl;
         return 0;
       }
-      if(n-now>=100100100){
-        cout << 'A';
-        now/=2;
-        now++;
-        continue;
-      }
-      now/=2;
-      for(int i=0;i<n-now;i++){
-        cout << 'A';
-      }
-      cout << endl;
-      break;
     }
-    cout << 'B';
-  }
+  }while(next_permutation(p.begin(),p.end()));
+
 }
