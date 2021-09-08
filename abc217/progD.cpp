@@ -6,22 +6,20 @@ int main(){
   int l,q;
   cin >> l >> q;
 
-  vector<int> woods={0,l};
+  map<int,int> woods;
+  woods[0]=0;
+  woods[l]=0;
 
   int c,x;
   for(int i=0;i<q;i++){
     cin >> c >> x;
     if(c==1){
-      woods.push_back(x);
+      woods[x]++;
     }else{
-      sort(woods.begin(),woods.end());
-      auto position=lower_bound(woods.begin(),woods.end(),x);
-      // cout << "x:" << x << endl;
-      // for(int i=0;i<woods.size();i++)cout << woods[i] << ",";
-      // cout << endl;
-      // cout << "position:" << *position << endl;
-      // cout << "end:" << *woods.end() << endl;
-      cout << (*position-*(position-1)) << endl;
+      auto itr=woods.lower_bound(x);
+      auto itr_before=itr;
+      itr_before--;
+      cout << (itr->first-itr_before->first) << endl;
     }
   }
 }
