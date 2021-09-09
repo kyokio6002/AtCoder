@@ -13,7 +13,7 @@ int main(){
     a[t]=true;
   }
 
-  // 約数判定 O(LlogL)
+  // 約数判定 O(NlogN)
   vector<int> divide;
   for(int d=2;d<max_a;d++){
     for(int i=d;i<max_a;i+=d){
@@ -29,7 +29,7 @@ int main(){
   //   cout << d << ",";
   // }cout << endl;
   
-  
+  // 条件判定 O(Nlogm)
   vector<bool> ans(m+1,true);
   for(auto d:divide){
     for(int i=d;i<=m;i+=d){
