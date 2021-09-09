@@ -1,39 +1,50 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-using ll=long long;
-
 int main(){
 
   int n,m;
   cin >> n >> m;
-  
-  vector<int> a(n);
-  map<int,int> mp;
+  int max_a=100001;
+  vector<bool> a(max_a,false);
+  int t;
   for(int i=0;i<n;i++){
-    cin >> a[i];
-    mp[a[i]]++;
+    cin >> t;
+    a[t]=true;
   }
 
-  vector<int> ans;
-  int flag;
-  map<int,int> nmp;
-  for(int k=1;k<=m;k++){
-    flag=1;
-    nmp=mp;
-    for(int i=0;i<n;i++){
-      if(gcd(a[i],k)!=1){
-        flag=0;
+  // 約数判定 O(LlogL)
+  vector<int> divide;
+  for(int d=2;d<max_a;d++){
+    for(int i=d;i<max_a;i+=d){
+      if(a[i]){
+        divide.push_back(d);
         break;
-      }else{
-        nmp.erase(k);
       }
     }
-    if(flag)ans.push_back(k);
   }
 
-  cout << ans.size() << endl;
-  for(int i=0;i<ans.size();i++){
-    cout << ans[i] << endl;
+  // cout << "divide:";
+  // for(auto d:divide){
+  //   cout << d << ",";
+  // }cout << endl;
+  
+  
+  vector<bool> ans(m+1,true);
+  for(auto d:divide){
+    for(int i=d;i<=m;i+=d){
+      ans[i]=false;
+    }
   }
+
+  int count=0;
+  for(int i=1;i<=m;i++){
+    if(ans[i])count++;
+  }
+  cout << count << endl;
+  for(int i=1;i<=m;i++){
+    if(ans[i])cout << i << endl;
+  }
+
+
 }
