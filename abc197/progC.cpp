@@ -8,8 +8,8 @@ int main(){
   vector<int> a(n);
   for(int i=0;i<n;i++)cin >> a[i];
 
-  int ans=1001001001;
-  for(int i=(1<<n)-1;i>=0;i--){
+  int ans=2001001001;
+  for(int i=0;i<(1<<n);i++){
     // cout << bitset<8>(i) << endl;
     int now=0;
     int XOR=0;
