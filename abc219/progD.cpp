@@ -12,25 +12,34 @@ int main(){
   vector<int> b(n);
   for(int i=0;i<n;i++)cin >> a[i] >> b[i];
 
-  vector<vector<vector<int>>> dp(303,vector<vector<int>>(303,vector<int>(303)));
+  vector<vector<vector<int>>> dp(n+2,vector<vector<int>>(x+1,vector<int>(y+1,-1)));
 
-  int ans=1001001001;
-  int flag=0;
-  for(int i=0;i<n-1;i++){
-    for(int xs=0;xs<303;xs++){
-      for(int ys=0;ys<303;ys++){
-        if(xs>=x && ys>=y && dp[i][xs][ys]>0){
-          flag=1;
-          ans=min(ans,dp[i][xs][ys]);
+  for(int i=0;i<=n;i++){
+    for(int xs=0;xs<=x;xs++){
+      for(int ys=0;ys<=y;ys++){
+        // 常に最小
+        dp[i+1][min(x,a[i])][min(y,b[i])]=1;
+
+        // そのままの値を更新
+        if(dp[i][xs][ys]>0){
+          if(dp[i+1][xs][ys]>0)dp[i+1][xs][ys]=min(dp[i+1][xs][ys],dp[i][xs][ys]);
+          else dp[i+1][xs][ys]=dp[i][xs][ys];
         }
-        if(xs+a[i]<=300 && ys+b[i]<=300){
-          dp[i+1][xs+a[i]][ys+b[i]]++;
+
+        // 追加して更新
+        if(dp[i][xs][ys]>0){
+          int nxs=min(x,xs+a[i]);
+          int nys=min(y,ys+b[i]);
+          if(dp[i+1][nxs][nys]>0){
+            dp[i+1][nxs][nys]=min(dp[i+1][nxs][nys],dp[i][xs][ys]+1);
+          }else{
+            dp[i+1][nxs][nys]=dp[i][xs][ys]+1;
+          }
         }
-        dp[i+1][xs][ys]=dp[i][xs][ys];
       }
     }
   }
 
-  if(flag)cout << ans << endl;
+  if(dp[n][x][y]>0)cout << dp[n][x][y] << endl;
   else cout << -1 << endl;
 }
