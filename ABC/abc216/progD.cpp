@@ -7,52 +7,44 @@ int main(){
   cin >> n >> m;
 
   vector<queue<int>> a(m);
+  vector<vector<int>> pos(n);
+
   int k,b;
   for(int i=0;i<m;i++){
     cin >> k;
     map<int,int> mp;
     for(int j=0;j<k;j++){
-      cin >> b;
+      cin >> b;b--;
       a[i].push(b);
-
-      // 同じ筒状に同じ値がないかチェック
-      mp[b]++;
-      // if(mp[b]>1){
-      //   cout << "No" << endl;
-      //   return 0;
-      // }
+      pos[b].push_back(i);
     }
   }
 
+  vector<int> count(n);
+  queue<int> que;
+  for(int i=0;i<m;i++){
+    b=a[i].front();
+    count[b]++;
+    if(count[b]==2)que.push(b);
+  }
 
-  map<int,int> empty_hole;
-  while(1){
-    map<int,pair<int,int>> mp;
-    int flag=1;
-    for(int i=0;i<m;i++){
-      // 空の筒はスキップ
-      if(a[i].empty()){
-        empty_hole[i]++;
-        if(empty_hole.size()==m){
-          cout << "Yes" << endl;
-          return 0;
-        }
-      }else{
-        b=a[i].front();
-        if(mp[b].first){
-          a[i].pop();
-          a[mp[b].second].pop();
-          flag=0;
-        }else{
-          mp[b].first++;
-          mp[b].second=i;
-        }
+  int ans=n;
+  while(!que.empty()){
+    b=que.front();
+    que.pop();
+    ans--;
+    for(int i=0;i<2;i++){
+      int p=pos[b][i];
+      a[p].pop();
+      if(!a[p].empty()){
+        int nb=a[p].front();
+        count[nb]++;
+        if(count[nb]==2)que.push(nb);
       }
     }
-
-    if(flag){
-      cout << "No" << endl;
-      return 0;
-    }
   }
+
+  if(ans)cout << "No" << endl;
+  else cout << "Yes" << endl;
+
 }
