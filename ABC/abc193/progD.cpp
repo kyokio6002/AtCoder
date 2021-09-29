@@ -3,25 +3,46 @@ using namespace std;
 
 using ll=long long;
 
-ll culc(string s){
-  ll score=0;
-  for(int i=0;i<5;i++){
-    int n=(s[i]-'0');
-    ll add=1;
-    for(int j=0;j<n;j++)add*=10;
-    score+=add;
-  }
-  return score;
+ll culc(string now,ll next){
+  ll sum=0;
+  vector<ll> n(10);
+  for(int i=1;i<10;i++)n[i]=i;
+  for(int i=0;i<4;i++)n[now[i]-'0']*=10;
+  n[next]*=10;
+
+  for(int i=1;i<10;i++)sum+=n[i];
+
+  return sum;
 }
+
 
 int main(){
 
-  int k;
+  ll k;
   cin >> k;
   string s,t;
   cin >> s >> t;
 
-  cout << culc(s) << endl;
-  cout << culc(t) << endl;
+  map<ll,ll> mp;
+  for(ll i=1;i<10;i++)mp[i]=k;
+  for(ll i=0;i<4;i++){
+    mp[(s[i]-'0')]--;
+    mp[(t[i]-'0')]--;
+  }
 
+  ll aoki,taka;
+  ll ans=0;
+  for(ll i=1;i<10;i++){
+    if(mp[i]<1)continue;
+    taka=culc(s,i);
+    for(ll j=1;j<10;j++){
+      aoki=culc(t,j);
+      if(i==j && taka>aoki)ans+=(mp[i])*(mp[i]-1);
+      else if(taka>aoki)ans+=(mp[i]*mp[j]);
+    }
+  }
+
+  // cout << "ans:" << ans << endl;
+  double p = double(ans)/(9*k-8)/(9*k-9);
+  cout << p << endl;
 }
