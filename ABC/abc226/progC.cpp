@@ -7,7 +7,7 @@ int main(){
 
   int n;
   cin >> n;
-  vector<map<int,int>> waza(n);
+  vector<vector<int>> waza(n);
 
   ll t,k;
   int a;
@@ -18,20 +18,26 @@ int main(){
     for(int _=0;_<k;_++){
       cin >> a;
       a--;
-      waza[i][a]++;
+      waza[i].push_back(a);
     }
   }
 
   map<int,int> mp;
   mp[n-1]++;
-  for(auto v:waza[n-1]){
-    int next=v.first;
-    mp[next]++;
-    mp.merge(waza[next]);
+  queue<int> que;
+  for(auto v:waza[n-1])que.push(v);
+
+  int now;
+  while(!que.empty()){
+    now=que.front();
+    que.pop();
+    if(mp[now])continue;
+    mp[now]++;
+    for(auto v:waza[now])que.push(v);
   }
+
   ll ans=0;
-  // for(auto v:mp)cout << v.first << ",";
-  // cout << endl;
-  for(auto v:mp)ans+=time[v.first];
+  for(auto [i,v]:mp)ans+=time[i];
   cout << ans << endl;
+
 }
