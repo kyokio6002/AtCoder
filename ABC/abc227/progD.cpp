@@ -7,33 +7,34 @@ int main(){
 
   int q;
   cin >> q;
-  ll n=int(pow(2,20));
-  vector<int> a(n+1,-1);
+  int n=int(pow(2,20));
+  vector<ll> a(n+5,-1);
   map<int,int> mp;
-  for(int i=1;i<=n;i++)mp[i]++;
+  for(int i=0;i<n;i++)mp[i]=1;
 
-  int t,k;
+  int t,h;
   ll x;
-  for(int i=0;i<q;i++){
+  for(int _=0;_<q;_++){
     cin >> t >> x;
-    k=int(x%n);
+    h=int(x%(ll)n);
     if(t==1){
+      // 検索用に追加
       int flag=0;
-      if(!mp[k]){
+      if(mp[h]==0){
         flag=1;
-        mp[k]=0;
+        mp[h]=-1;
       }
-      auto it=mp.find(k);
-      // cout << "before:" << it->first%n << endl;
-      if(flag)advance(it,1);
-      // cout << "after:" << it->first%n << endl;
+      map<int,int>::iterator  it=mp.find(h);
+      if(flag){
+        if(it->first==mp.rbegin()->first)it=mp.begin();
+        else it++;
+      }
       a[it->first]=x;
-      if(flag)mp.erase(mp.find(k));
-      mp.erase(mp.find(it->first));
-      // cout << x%n << ":" << a[k] << endl;
+      if(flag)mp.erase(mp.find(h));
+      mp.erase(it);
     }else{
-      // cout << x%n << ":" << a[k] << endl;
-      cout << a[x%n] << endl;
+      cout << a[h] << endl;
     }
   }
+
 }
