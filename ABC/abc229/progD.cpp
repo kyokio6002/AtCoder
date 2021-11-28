@@ -23,6 +23,10 @@ int main(){
         count=1;
         flag=1;
       }
+      if(i==len-1){
+        a.push_back(count);
+        zeromax=max(zeromax,count);
+      }
     }else{
       dots++;
       if(flag){
@@ -35,11 +39,11 @@ int main(){
     }
   }
 
-  if(dots<=k){
-    cout << s.length() << endl;
-    return 0;
-  }else if(k==0){
+  if(k==0 && dots!=0){
     cout << zeromax << endl;
+    return 0;
+  }else if(dots<=k){
+    cout << s.length() << endl;
     return 0;
   }
 
@@ -53,9 +57,7 @@ int main(){
   int negsum=0;
   int negindex=0;
   flag=0;
-  if(a[0]<0){
-    negsum++;
-  }
+  if(a[0]<0)negsum++;
   dp[0]=abs(a[0]);
 
   for(int i=1;i<a.size();i++){
