@@ -4,40 +4,36 @@ using namespace std;
 int main(){
 
   string s;
-  cin >> s;
   int k;
-  cin >> k;
+  cin >> s >> k;
 
-  vector<int> a;
-  int flag=0;
-  if(s[0]=='X')flag=1;
-  int count=0;
-  int dot=0;
   vector<int> neg;
-  for(int i=0;i<s.length();i++){
+  int dots=0;
+  int len=s.length();
+  int flag=(s[0]=='X')?1:0;
+  int count=0;
+  vector<int> a;
+  // cout << "flag:" << flag << endl;
+  for(int i=0;i<len;i++){
     if(s[i]=='X'){
-      if(i==s.length()-1){
-        a.push_back(count+1);
-        break;
-      }
-      if(flag)count++;
-      else{
-        flag=1;
+      if(flag){
+        count++;
+      }else{
         count=1;
+        flag=1;
       }
     }else{
-      dot++;
+      dots++;
       if(flag){
         a.push_back(count);
-        count=1;
         flag=0;
       }
       a.push_back(-1);
       neg.push_back(a.size()-1);
-    } 
+    }
   }
 
-  if(dot<=k){
+  if(dots<=k){
     cout << s.length() << endl;
     return 0;
   }
@@ -47,32 +43,35 @@ int main(){
   // for(int i=0;i<neg.size();i++)cout << neg[i] << ",";
   // cout << endl;
 
-  vector<int> dp(a.size());
-  dp[0]=abs(a[0]);
+  vector<int> dp(a.size()+1);
+  int ans=0;
   int negsum=0;
-  int ans=abs(a[0]);
-  if(a[0]==-1)negsum=1;
+  int negindex=0;
+  if(a[0]<0){
+    negsum++;
+  }
+  dp[0]=abs(a[0]);
 
-  for(int i=0;i<a.size()-1;i++){
-    dp[i+1]=dp[i]+abs(a[i+1]);
-
-    if(a[i+1]<0)negsum++;
+  for(int i=1;i<a.size();i++){
+    dp[i]=dp[i-1]+abs(a[i]);
+    // negの個数をカウント
+    if(a[i]<0)negsum++;
 
     if(negsum>k){
-      if(a[i+1]<0){
-        ans=max(ans,dp[i+1]-dp[neg[0]]);
-        neg.erase(neg.begin());
-        cout << "ans:" << ans << endl;
+      if(a[i]<0){
+        ans=max(ans,dp[i]-dp[neg[negindex]]);
+        // cout << "negindex:" << neg[negindex] << endl;
+        // printf("ans1:%d(now;%d)(negsum:%d)\n",ans,dp[i]-dp[neg[negindex]],negsum);
+        negindex++;
       }else{
-        ans=max(ans,dp[i+1]-dp[neg[0]]+abs(a[i+1]));
-        cout << "ans:" << ans << endl;
+        ans=max(ans,dp[i]-dp[neg[negindex]-1]+a[i]);
+        // printf("ans2:%d(now;%d)(negsum:%d)\n",ans,dp[i]-dp[neg[negindex]-1]+a[i],negsum);
       }
     }else{
-      ans+=abs(a[i+1]);
-      cout << "ans:" << ans << endl;
+      ans=max(ans,dp[i]);
+      // printf("ans3:%d(now;%d)(negsum:%d)\n",ans,dp[i],negsum);
     }
   }
 
   cout << ans << endl;
-
 }
