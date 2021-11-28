@@ -14,6 +14,7 @@ int main(){
   int count=0;
   vector<int> a;
   // cout << "flag:" << flag << endl;
+  int zeromax=0;
   for(int i=0;i<len;i++){
     if(s[i]=='X'){
       if(flag){
@@ -27,6 +28,7 @@ int main(){
       if(flag){
         a.push_back(count);
         flag=0;
+        zeromax=max(zeromax,count);
       }
       a.push_back(-1);
       neg.push_back(a.size()-1);
@@ -35,6 +37,9 @@ int main(){
 
   if(dots<=k){
     cout << s.length() << endl;
+    return 0;
+  }else if(k==0){
+    cout << zeromax << endl;
     return 0;
   }
 
@@ -47,6 +52,7 @@ int main(){
   int ans=0;
   int negsum=0;
   int negindex=0;
+  flag=0;
   if(a[0]<0){
     negsum++;
   }
@@ -59,16 +65,19 @@ int main(){
 
     if(negsum>k){
       if(a[i]<0){
-        ans=max(ans,dp[i]-dp[neg[negindex]]);
+        if(!flag)flag++;
+        else negindex++;
+        int now=dp[i]-dp[neg[negindex]];
+        ans=max(ans,now);
         // cout << "negindex:" << neg[negindex] << endl;
-        // printf("ans1:%d(now;%d)(negsum:%d)\n",ans,dp[i]-dp[neg[negindex]],negsum);
-        negindex++;
+        // printf("ans1:%d(now;%d)(negsum:%d)\n",ans,now,negsum);
       }else{
-        ans=max(ans,dp[i]-dp[neg[negindex]-1]+a[i]);
-        // printf("ans2:%d(now;%d)(negsum:%d)\n",ans,dp[i]-dp[neg[negindex]-1]+a[i],negsum);
+        int now=dp[i]-dp[neg[negindex]];
+        ans=max(ans,now);
+        // printf("ans2:%d(now;%d)(negsum:%d)\n",ans,now,negsum);
       }
     }else{
-      ans=max(ans,dp[i]);
+      ans=dp[i];
       // printf("ans3:%d(now;%d)(negsum:%d)\n",ans,dp[i],negsum);
     }
   }
