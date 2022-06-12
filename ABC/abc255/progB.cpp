@@ -8,7 +8,7 @@ int main(){
   map<int,int> mp;
   vector<pair<long double,long double>> x(n);
 
-  map<int,long double> tt;
+  map<int,long long> tt;
 
   int a;
   for(int i=0;i<k;i++){
@@ -24,40 +24,29 @@ int main(){
   }
 
 
+  long long aans=0;
   for(int i=0;i<n;i++){
-    long double shortest_g=0;
-    int group;
-    // cout << "i:" << i << endl;
+    long long shortest_g=-1;
     for(auto v:mp){
       int t=v.first;
-      // if(mp[t] && mp[i])continue;
 
-      long double now=0;
-      now+=pow(x[i].first-x[t].first,2);
-      now+=pow(x[i].second-x[t].second,2);
-      now=sqrt(now);
+      long long now=0;
+      now+=(x[i].first-x[t].first)*(x[i].first-x[t].first);
+      now+=(x[i].second-x[t].second)*(x[i].second-x[t].second);
       // cout << "now:" << now << endl;
-      if(i==t)continue;
-      if(shortest_g==0){
+      if(shortest_g==-1){
         shortest_g=now;
         group=t;
       }else if(shortest_g>now){
         shortest_g=now;
         group=t;
       }
+      // shortest_g=min(shortest_g,now);
     }
-    // cout << "group:" << group << endl;
-    // cout << "shortest_g:" << shortest_g << endl;
-    if(tt[group]<shortest_g)tt[group]=shortest_g;
-  }
-
-  long double aans=0;
-  for(auto v:tt){
-    // cout << "tt:" << v.second << endl;
-    if(aans<v.second)aans=v.second;
+    aans=max(shortest_g,aans);
   }
 
   cout << std::fixed;
-  cout << std::setprecision(16) << aans << endl;
+  cout << std::setprecision(16) << sqrt(aans) << endl;
 
 }
