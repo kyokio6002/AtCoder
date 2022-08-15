@@ -9,9 +9,10 @@ int main(){
   ll n,m,k;
   cin >> n >> m >> k;
 
+  // dp[i][j]:i個選んだ時に総和がjになるパターン数
   vector<vector<ll>> dp(n,vector<ll>(k+1));
 
-  for(int i=1;i<=k;i++)dp[0][i]=1;
+  for(int i=1;i<=m;i++)dp[0][i]=1;
 
   for(int i=0;i<n-1;i++){
     for(int now=1;now<=k;now++){
@@ -22,7 +23,7 @@ int main(){
     }
   }
   
-  // // for(int i=0;i<=n+3;i++)cout << "-";
+  // // for(int i=0;i<=k+3;i++)cout << "-";
   // // cout << endl;
   // for(int j=1;j<=k;j++){
   //   // cout << j << "|";
