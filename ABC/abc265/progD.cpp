@@ -26,16 +26,16 @@ int main(){
     int y=-1,z=-1,w=-1;
     int flag=0;
     if(x==0){
-      if(mp.count(p))y=mp[p];
+      if(mp.count(p))y=mp[p]+1;
     }else{
       if(mp.count(p+sum[x-1]))y=mp[p+sum[x-1]]+1;
-      if(y<=x)continue;
+      // if(y<=x)continue;
     }
 
     if(mp.count(q+sum[y-1]))w=mp[q+sum[y-1]]+1;
-    if(w<=y)continue;
+    // if(w<=y)continue;
     if(mp.count(r+sum[w-1]))z=mp[r+sum[w-1]]+1;
-    if(z<=w)continue;
+    // if(z<=w)continue;
 
     // printf("%d,%d,%d,%d\n",x,y,w,z);
 
