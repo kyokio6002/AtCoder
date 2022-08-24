@@ -1,70 +1,65 @@
+#include <algorithm>
 #include<bits/stdc++.h>
+#include <string>
 using namespace std;
 
+#define mod 998244353
+#define div2 499122177
 using ll=long long;
 
+ll llpow(ll num,ll time, ll m=1){
+  ll ans=1;
+  for(int i=0;i<time;i++)ans=ans*num%m;
+  return ans;
+}
+
 int main(){
-  
+
   ll n;
   cin >> n;
-  ll mod=998244353;
-  ll mod2=499122177;
-
-  int d=0;
-  ll t=n;
-  for(int i=0;i<19;i++){
-    t/=10;
-    if(t==0)break;
-    d++;
-  }
-  cout << "^10:" << d << endl;
+  int digit_of_n=to_string(n).length();
+  // cout << "digit_of_n:" << digit_of_n << endl;
 
   ll ans=0;
-  ll start;
-  ll end;
-  ll count;
-  ll add;
-  ll sub;
-  for(int i=0;i<d;i++){
-    start=ll(pow(10,i));
-    end=ll(pow(10,i+1)-1);
-    count=end-(start-1);
+  for(int digit=0;digit<digit_of_n-1;digit++){
+    ll min_num=llpow(10,digit,mod);    // 10^2=100
+    ll max_num=llpow(10,digit+1,mod);  // 10^3-1=999
+    max_num--;
+    ll count=(max_num-min_num+1)%mod;
 
-    //add=count*((start+end)%mod)%mod*mod2%mod;
-    //sub=count*(start-1)%mod;
-    add=(count%mod)*((start%mod+end%mod)%mod)%mod*mod2%mod;
-    sub=(count%mod)*((start-1)%mod)%mod;
+    ll add=count*((min_num+max_num)%mod)%mod*div2%mod;
+    ll sub=count*(min_num-1)%mod;
 
-    ans=(ans+add%mod)%mod;
-    ans=(ans-sub%mod+mod)%mod;
+    // cout << "min_num:" << min_num << endl;
+    // cout << "max_num:" << max_num << endl;;
+    // cout << "count:" << count << endl;
+    // cout << "add:" << add << endl;
+    // cout << "sub:" << sub << endl;
+    // cout << endl;
+    
+    ans=(ans+add)%mod;
+    ans=(ans-sub)%mod;
     ans=(ans+mod)%mod;
-
-    cout << "count:" << count << endl;
-    cout << "start:" << start << endl;
-    cout << "end:  " << end << endl;
-    cout << "add:  " << add << endl;
-    cout << "sub:  " << sub << endl;
-    cout << "ans:  " << ans << endl << endl;
   }
-  start=ll(pow(10,d));
-  end=n;
-  count=end-(start-1);
 
-  //add=count*((start+end)%mod)%mod*mod2%mod;
-  //sub=count*(start-1)%mod;
-  add=(count%mod)*((start%mod+end%mod)%mod)%mod*mod2%mod;
-  sub=(count%mod)*((start-1)%mod)%mod;
+  ll min_num=llpow(10,digit_of_n-1,mod);
+  ll max_num=n%mod;
+  ll count=(max_num-min_num+1)%mod;
+  
+  ll add=count*((min_num+max_num)%mod)%mod*div2%mod;
+  ll sub=count*(min_num-1)%mod;
+
+  // cout << "min_num:" << min_num << endl;
+  // cout << "max_num:" << max_num << endl;;
+  // cout << "count:" << count << endl;
+  // cout << "add:" << add << endl;
+  // cout << "sub:" << sub << endl;
+  // cout << endl;
 
   ans=(ans+add)%mod;
   ans=(ans-sub)%mod;
   ans=(ans+mod)%mod;
 
-  cout << "count:" << count << endl;
-  cout << "start:" << start << endl;
-  cout << "end:  " << end << endl;
-  cout << "add:  " << add << endl;
-  cout << "sub:  " << sub << endl;
-  cout << "ans:  " << ans << endl << endl;
+  cout << ans%mod << endl;
 
-  cout << (ans+mod)%mod << endl;
 }
