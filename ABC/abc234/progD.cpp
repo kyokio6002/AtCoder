@@ -1,24 +1,24 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
 int main(){
 
   int n,k;
   cin >> n >> k;
 
-  vector<int> a(n);
-  vector<int> p;
-  for(int i=0;i<n;i++){
-    cin >> a[i];
-    if(i<k-1)p.push_back(a[i]);
+  vector<int> p(n);
+  for(int i=0;i<n;i++)cin >> p[i];
+  priority_queue<int,vector<int>,greater<int>> que;
+  for(int i=0;i<k;i++)que.push(p[i]);
+  cout << que.top() << endl;
+  
+  for(int i=k;i<n;i++){
+    if(que.top()<p[i]){
+      que.pop();
+      que.push(p[i]);
+    }
+    cout << que.top() << endl;
   }
 
-  sort(p.begin(),p.end());
-  for(int end=k-1;end<n;end++){
-    auto it = lower_bound(p.begin(),p.end(),a[end]);
-    p.insert(it,a[end]);
-    // for(int i=0;i<p.size();i++)cout << p[i] << ",";
-    // cout << endl;
-    cout << p[end-(k-1)] << endl;
-  }
 }
