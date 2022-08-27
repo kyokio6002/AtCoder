@@ -1,67 +1,60 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+vector<int> dist;
+vector<int> start;
+vector<vector<int>> edge;
+bool ans=0;
+
+void dfs(int from,int now){
+
+  dist[now]++;
+  start[now]=0;
+  
+  // cout << "now:" << now+1 << endl;
+
+  for(auto to:edge[now]){
+    if(dist[to]){
+      if(to!=from){
+        ans=true;
+        return;
+      }
+      continue;
+    }
+    dfs(now,to);
+    if(ans)return;
+  }
+}
+
 int main(){
 
   int n,m;
-  cin >> n >> m;
-  vector<vector<int> > edge(n);
   int a,b;
+  cin >> n >> m;
+  dist.resize(n);
+  edge.resize(n);
+  start.resize(n);
+
   for(int i=0;i<m;i++){
     cin >> a >> b;
     a--,b--;
     edge[a].push_back(b);
     edge[b].push_back(a);
-    // 接続が2点以上あればNo
-    if(edge[a].size()>2 || edge[b].size()>2){
+    start[a]++;
+    start[b]++;
+  }
+  for(int i=0;i<edge.size();i++){
+    // cout << i << ":" << edge[i].size() << endl;
+    if(edge[i].size()>2){
       cout << "No" << endl;
       return 0;
     }
   }
 
-  vector<int> starts;
   for(int i=0;i<n;i++){
-    if(edge[i].size()<2)starts.push_back(i);
+    if(start[i])dfs(-1,i);
   }
 
-  vector<int> dist(n);
-
-  for(int i=0;i<starts.size();i++){
-    int start=starts[i];
-    if(dist[start])continue;
-    queue<int> que;
-    que.push(start);
-    while(!que.empty()){
-      int v=que.front();
-      que.pop();
-
-      dist[v]++;
-      if(edge[v].size()==1){
-        if(v==start)que.push(edge[v][0]);
-      }else if(edge[v].size()==2){
-        int next1=edge[v][0];
-        int next2=edge[v][1];
-        if(dist[next1]!=0 && dist[next2]!=0){
-          cout << "No" << endl;
-          return 0;
-        }else if(dist[next1]==0 && dist[next2]==0){
-          cout << 100/0 << endl;
-        }else if(dist[next1]==0){
-          que.push(next1);
-        }else if(dist[next2]==0){
-          que.push(next2);
-        }
-      }
-    }
-  }
-
-  int count=0;
-  for(int i=0;i<n;i++){
-    if(dist[i])count++;
-  }
-
-  if(count!=n)cout << 100/0 << endl;
-  cout << "Yes" << endl;
-
-
+  if(ans)cout << "No" << endl;
+  else cout << "Yes" << endl;
 }
