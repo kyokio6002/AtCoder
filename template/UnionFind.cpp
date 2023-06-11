@@ -27,7 +27,7 @@ struct UnionFind{
   }
 
   // 同じ木か確認する
-  bool same(int x,int y){
+  bool is_same(int x,int y){
     int rx=root(x);
     int ry=root(y);
     return rx==ry;
