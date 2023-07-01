@@ -4,11 +4,19 @@
 #include <vector>
 using namespace std;
 
-long long gcd(long a, long b){
-  if(a%b == 0){
-    return b;
-  }else{
-    return gcd(b, a%b);
+struct tt{
+  long long a;
+  long long b;
+  int index;
+};
+
+bool asc_desc(tt& left, tt& right) {
+  long long idata = left.a*(right.a+right.b);
+  long long jdata = right.a*(left.a+left.b);
+  if (idata == jdata) {
+    return left.index > right.index;
+  } else {
+    return idata < jdata;
   }
 }
 
@@ -16,26 +24,16 @@ int main(){
 
   int n;
   cin >> n;
-  vector<pair<long long,long long>> ps(n);
-  long long ggcd;
+  vector<tt> ps(n);
   long long a,b;
   for(int i=0;i<n;i++){
     cin >> a >> b;
-    ps[i]={a,b};
-    if(i!=0)ggcd=gcd(ggcd, a+b);
-    else ggcd=a+b;
+    ps[i].a = a;
+    ps[i].b = b;
+    ps[i].index = i;
   }
 
-  cout << "ggcd:" << ggcd << endl;
-  map<long long, vector<int>> mp;
-  for(int i=0;i<n;i++){
-    long long t=ggcd/(ps[i].first+ps[i].second)*ps[i].first;
-    mp[-t].push_back(i+1);
-  }
-
-  for(auto [t,vec]:mp){
-    cout << "t:" << t << endl;
-    for(int i=0;i<vec.size();i++)cout << vec[i] << " ";
-  }cout << endl;
+  sort(ps.rbegin(),ps.rend(),asc_desc);
+  for(int i=0;i<n;i++)cout << ps[i].index+1 << " \n"[i==n-1];
   
 }
