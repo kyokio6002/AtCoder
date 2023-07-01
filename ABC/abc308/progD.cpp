@@ -31,7 +31,6 @@ void dfs(int x,int y, int cost){
     //cout << endl;
     dfs(nx, ny, cost+1);
   }
-  dist[x][y]=false;
 }
 
 int main(){
